@@ -44,6 +44,8 @@ public class Main :IXposedHookLoadPackage{
                 var simei=""
                 var sagent=""
                 var schannel=""
+                var phoneMode=""
+                var phoneBrand=""
                 try{
                     var pr=ct.getSharedPreferences("dd",Context.MODE_PRIVATE)
                     if(pr.getString("imei","")==""&&pr.getString("deviid","")==""){
@@ -51,16 +53,39 @@ public class Main :IXposedHookLoadPackage{
                         pr.edit().putString("deviid","77777").commit()
                         pr.edit().putString("agent","http").commit()
                         pr.edit().putString("channel","111").commit()
+                        pr.edit().putString("phoneMode","Coo1pad B770")
+                        pr.edit().putString("phoneBrand","Coo1pad")
                     }
                     simei=pr.getString("imei","")
                     sdeviid=pr.getString("deviid","")
                     sagent=pr.getString("agent","")
                     schannel=pr.getString("channel","")
+                    phoneMode=pr.getString("phoneMode","")
+                    phoneBrand=pr.getString("phoneBrand","")
                     XposedBridge.log("获取imei和deviid成功")
                 }catch(e:Exception){
                     XposedBridge.log(e)
                 }
 
+
+
+
+
+                XposedHelpers.findAndHookMethod(DeviceUtil, "getDeviceBrand", object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        XposedBridge.log("已经修改getDeviceBrand")
+                        param.result = phoneBrand;
+                    }
+                });
+
+
+
+                XposedHelpers.findAndHookMethod(DeviceUtil, "getSystemModel", object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        XposedBridge.log("已经修改getSystemModel")
+                        param.result = phoneMode;
+                    }
+                });
 
 
 
