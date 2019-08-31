@@ -42,6 +42,7 @@ public class Main :IXposedHookLoadPackage{
                 var DeviceUtil=cl.loadClass("com.cmcc.cmvideo.foundation.util.DeviceUtil")
                 var SdkUtil=cl.loadClass("com.cmvideo.analitics.common.SdkUtil")
                 var ChannelUtil=cl.loadClass("com.cmcc.cmvideo.foundation.util.ChannelUtil")
+                var ClarityUtil=cl.loadClass("com.cmcc.cmvideo.foundation.util.ClarityUtil")
 
                 var sdeviid=""
                 var simei=""
@@ -52,12 +53,12 @@ public class Main :IXposedHookLoadPackage{
                 try{
                     var pr=ct.getSharedPreferences("dd",Context.MODE_PRIVATE)
                     if(pr.getString("imei","")==""&&pr.getString("deviid","")==""){
-                        pr.edit().putString("imei","66666").commit()
-                        pr.edit().putString("deviid","77777").commit()
-                        pr.edit().putString("agent","http").commit()
-                        pr.edit().putString("channel","111").commit()
-                        pr.edit().putString("phonemode","Coo1pad B770").commit()
-                        pr.edit().putString("phonebrand","Coo1pad").commit()
+                        pr.edit().putString("imei","861729039971363").commit()
+                        pr.edit().putString("deviid","fe68296d50743c9e747c2d346ed36f55").commit()
+                        pr.edit().putString("agent","Dalvik/2.1.0 (Linux; U; Android 5.1; OPPO A37m Build/LMY47I)").commit()
+                        pr.edit().putString("channel","25000600-99000-200300280000001").commit()
+                        pr.edit().putString("phonemode","OPPO A37m").commit()
+                        pr.edit().putString("phonebrand","OPPO").commit()
                     }
                     simei=pr.getString("imei","")
                     sdeviid=pr.getString("deviid","")
@@ -129,6 +130,14 @@ public class Main :IXposedHookLoadPackage{
                         param.result=simei;
                     }
                 });
+
+                XposedHelpers.findAndHookMethod(ClarityUtil,"getRate",object :XC_MethodHook(){
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        XposedBridge.log("已经修改getRate")
+                        param.result="2";
+                    }
+                });
+
             }
         })
 
